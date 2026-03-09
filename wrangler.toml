@@ -18,6 +18,7 @@ binding = "CONFIG"
 BUILD_TIMESTAMP = "dev"
 
 [env.control]
+name = "api-transform-proxy-1"
 main = "src/control_entry.js"
 
 [[env.control.kv_namespaces]]
