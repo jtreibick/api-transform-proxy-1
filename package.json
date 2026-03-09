@@ -1,0 +1,20 @@
+{
+  "name": "api-transform-proxy-1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "deploy": "npm run deploy:all",
+    "deploy:cf": "wrangler deploy --env control",
+    "deploy:runtime": "wrangler deploy --env runtime",
+    "deploy:control": "wrangler deploy --env control",
+    "deploy:all": "npm run deploy:runtime && npm run deploy:control",
+    "test": "node --loader ./test/text-template-loader.mjs --test test/worker.smoke.test.js"
+  },
+  "devDependencies": {
+    "wrangler": "^4.45.0"
+  },
+  "dependencies": {
+    "jsonata": "^2.0.6",
+    "yaml": "^2.8.1"
+  }
+}

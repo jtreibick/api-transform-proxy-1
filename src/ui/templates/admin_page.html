@@ -1,0 +1,379 @@
+       <div id="admin-auth" style="margin:12px 0;">
+         <h3 id="login-fqdn" style="margin:0 0 10px 0;font-size:16px;color:#475569;font-weight:600;"></h3>
+         <label for="admin-key" style="display:block;font-weight:700;margin-bottom:6px;">Login with admin key</label>
+         <input id="admin-key" type="password" placeholder="paste X-Admin-Key"
+           style="width:100%;max-width:560px;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;" />
+         <div style="margin-top:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+           <button type="button" id="login-btn"
+             style="padding:8px 12px;border:1px solid #0f172a;border-radius:8px;background:#111827;color:#fff;cursor:pointer;">Login</button>
+         </div>
+         <div id="admin-warning" style="display:none;padding:10px 12px;border:1px solid #fecaca;background:#fef2f2;color:#991b1b;border-radius:8px;margin:10px 0;"></div>
+       </div>
+       <div id="admin-shell" style="display:none;">
+         <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px;">
+           <img src="{{favicon_data_url}}" width="48" height="48" alt="API Transform Proxy icon" />
+           <div>
+             <h2 id="proxy-title" style="margin:0;font-size:20px;">API Transform Proxy</h2>
+             <h3 id="proxy-subtitle" style="margin:4px 0 0 0;font-size:14px;color:#475569;font-weight:600;"></h3>
+           </div>
+         </div>
+         <h1 style="margin:0 0 10px 0;font-size:30px;">Admin Console</h1>
+         <div style="display:flex;gap:14px;align-items:flex-start;margin:14px 0;">
+         <div id="admin-nav" style="display:flex;flex-direction:column;gap:8px;min-width:220px;">
+           <button type="button" class="tab-btn" data-tab="overview">Status</button>
+           <div style="margin-top:6px;font-size:12px;color:#64748b;font-weight:700;text-transform:uppercase;">Observability &amp; Testing</div>
+           <button type="button" class="tab-btn tab-child" data-tab="debug">Logging</button>
+           <button type="button" class="tab-btn tab-child" data-tab="live-log">Live Log</button>
+           <button type="button" class="tab-btn tab-child" data-tab="sandbox">API Sandbox</button>
+           <div style="margin-top:6px;font-size:12px;color:#64748b;font-weight:700;text-transform:uppercase;">Admin</div>
+           <button type="button" class="tab-btn tab-child" data-tab="admin-auth">Admin Auth</button>
+           <div style="margin-top:6px;font-size:12px;color:#64748b;font-weight:700;text-transform:uppercase;">Outbound</div>
+           <button type="button" class="tab-btn tab-child" data-tab="outbound-auth">Outbound Auth</button>
+           <button type="button" class="tab-btn tab-child" data-tab="outbound-transform">Outbound Transformations</button>
+           <div style="margin-top:6px;font-size:12px;color:#64748b;font-weight:700;text-transform:uppercase;">Inbound</div>
+           <button type="button" class="tab-btn tab-child" data-tab="inbound-auth">Inbound Auth</button>
+          <button type="button" class="tab-btn tab-child" data-tab="inbound-transform">Header Filtering</button>
+           <button type="button" class="tab-btn" data-tab="config">Config</button>
+           <a href="#" id="logout-link" style="margin-top:14px;font-size:14px;color:#0f172a;text-decoration:underline;">Log out</a>
+         </div>
+         <div style="flex:1;min-width:0;">
+         <div id="tab-overview" class="tab-panel">
+           <p><b>Status</b></p>
+           <div id="overview-output" style="padding:12px;border:1px solid #ddd;border-radius:8px;line-height:1.6;">Click "Refresh status".</div>
+           <button type="button" id="overview-refresh-btn">Refresh status</button>
+         </div>
+        <div id="tab-debug" class="tab-panel" style="display:none;">
+           <p><b>Logging controls</b></p>
+           <div id="logging-status" style="padding:12px;border:1px solid #ddd;border-radius:8px;line-height:1.6;margin:10px 0;">Loading logging status...</div>
+           <p style="margin-top:6px;margin-bottom:4px;">Logging expires in (seconds): <span id="logging-ttl-remaining-2">0</span> <a href="#" id="logging-ttl-refresh-link">refresh</a></p>
+           <label for="logging-ttl-seconds" style="display:block;margin:8px 0 4px;">Logging TTL</label>
+           <input id="logging-ttl-seconds" type="number" min="1" step="1" value="3600"
+             style="width:100%;max-width:220px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;" />
+           <p style="margin-top:12px;margin-bottom:6px;">Last Log</p>
+           <pre id="debug-output" style="margin-top:10px;padding:12px;border:1px solid #ddd;border-radius:8px;white-space:pre-wrap;word-break:break-word;max-height:320px;overflow:auto;">Debug output appears here.</pre>
+           <p style="margin-top:10px;"><a href="#" id="debug-refresh-trace-link">Refresh</a></p>
+           <p style="margin-top:16px;"><b>External Logging Configuration</b></p>
+           <label style="display:flex;gap:8px;align-items:center;margin:8px 0 6px;">
+             <input id="logging-config-enabled" type="checkbox" />
+             <span>Use external logging endpoint</span>
+           </label>
+           <div id="logging-config-fields" style="display:none;">
+             <p style="margin:10px 0 6px;"><b>Logging Request</b></p>
+             <div id="logging-request-form"></div>
+             <div id="logging-secret-wrap">
+               <div id="logging-secret-template"></div>
+               <p style="font-size:13px;color:#475569;margin:4px 0 0 0;">Logging secrets are managed via this API only and are not stored in YAML.</p>
+             </div>
+           </div>
+           <div style="margin-top:10px;"></div>
+          <div style="margin-top:14px;border-top:1px solid #e2e8f0;padding-top:10px;display:flex;justify-content:flex-end;">
+            <button type="button" id="footer-save-logging" style="background:#0f172a;color:#fff;border:1px solid #0f172a;padding:8px 14px;border-radius:8px;">Save</button>
+          </div>
+        </div>
+        <div id="tab-live-log" class="tab-panel" style="display:none;">
+          <p><b>Live Log</b></p>
+          <div id="live-log-status" style="padding:10px 12px;border:1px solid #ddd;border-radius:8px;line-height:1.5;margin:10px 0;">Disconnected.</div>
+          <p style="margin:8px 0 10px;">
+            <a href="#" id="live-log-reconnect-link">Reconnect</a>
+            <span style="padding:0 8px;color:#94a3b8;">|</span>
+            <a href="#" id="live-log-clear-link">Clear</a>
+          </p>
+          <pre id="live-log-output" style="margin-top:0;padding:12px;border:1px solid #ddd;border-radius:8px;white-space:pre-wrap;word-break:break-word;max-height:420px;overflow:auto;"></pre>
+        </div>
+        <div id="tab-config" class="tab-panel" style="display:none;">
+           <p><b>YAML config</b></p>
+           <label for="proxy-name" style="display:block;margin:8px 0 4px;">Proxy name</label>
+           <input id="proxy-name" type="text" placeholder="friendly name"
+             style="width:100%;max-width:520px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;margin-bottom:8px;" />
+           <textarea id="config-yaml" rows="14"
+             style="width:100%;max-width:740px;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;"></textarea>
+           <p id="config-validation-error" style="display:none;margin:6px 0 0;color:#b91c1c;font-size:14px;"></p>
+           <div style="margin-top:8px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+             <a href="#" id="config-reload-link">Reload config</a>
+             <a href="#" id="config-test-rule-link">Test rule</a>
+           </div>
+           <p style="margin:10px 0 6px;"><b>Test rule payload (JSON)</b></p>
+           <textarea id="config-test-rule-input" rows="8"
+             style="width:100%;max-width:740px;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;"></textarea>
+          <div style="margin-top:14px;border-top:1px solid #e2e8f0;padding-top:10px;display:flex;justify-content:flex-end;">
+            <button type="button" id="footer-save-config" style="background:#0f172a;color:#fff;border:1px solid #0f172a;padding:8px 14px;border-radius:8px;">Save</button>
+          </div>
+        </div>
+        <div id="tab-outbound-auth" class="tab-panel" style="display:none;">
+           <p><b>Outbound Auth</b></p>
+           <label style="display:flex;gap:8px;align-items:center;margin:8px 0 10px;">
+             <input id="outbound-auth-enabled" type="checkbox" />
+             <span>Enabled</span>
+           </label>
+           <div id="outbound-auth-fields">
+           <label for="kr-enabled" style="display:block;margin:8px 0 4px;">Enabled</label>
+           <input id="kr-enabled" type="checkbox" />
+
+           <label for="kr-strategy" style="display:block;margin:10px 0 4px;">Strategy</label>
+           <select id="kr-strategy" style="width:100%;max-width:420px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;">
+             <option value="json_ttl">json_ttl</option>
+             <option value="oauth_client_credentials">oauth_client_credentials</option>
+           </select>
+
+           <p style="margin:10px 0 6px;"><b>Request</b></p>
+           <div id="kr-request-form"></div>
+
+           <label for="kr-key-path" style="display:block;margin:10px 0 4px;">Response Key Path</label>
+           <input id="kr-key-path" type="text" placeholder="data.apiKey"
+             style="width:100%;max-width:520px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;" />
+
+           <label for="kr-ttl-path" style="display:block;margin:10px 0 4px;">Response TTL Path</label>
+           <input id="kr-ttl-path" type="text" placeholder="data.ttl"
+             style="width:100%;max-width:520px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;" />
+
+           <label for="kr-ttl-unit" style="display:block;margin:10px 0 4px;">TTL Unit</label>
+           <select id="kr-ttl-unit" style="width:100%;max-width:220px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;">
+             <option value="seconds">seconds</option>
+             <option value="minutes">minutes</option>
+             <option value="hours">hours</option>
+           </select>
+
+           <label for="kr-expires-at-path" style="display:block;margin:10px 0 4px;">Response Expires-At Path</label>
+           <input id="kr-expires-at-path" type="text" placeholder="data.expiresAt (optional)"
+             style="width:100%;max-width:520px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;" />
+
+           <label for="kr-refresh-skew" style="display:block;margin:10px 0 4px;">Refresh Skew Seconds</label>
+           <input id="kr-refresh-skew" type="number" min="0" step="1"
+             style="width:100%;max-width:220px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;" />
+
+           <label for="kr-retry-on-401" style="display:block;margin:10px 0 4px;">Retry Once On 401</label>
+           <input id="kr-retry-on-401" type="checkbox" />
+           </div>
+           <div style="margin-top:10px;"></div>
+          <div style="margin-top:14px;border-top:1px solid #e2e8f0;padding-top:10px;display:flex;justify-content:flex-end;">
+            <button type="button" id="footer-save-outbound-auth" style="background:#0f172a;color:#fff;border:1px solid #0f172a;padding:8px 14px;border-radius:8px;">Save</button>
+          </div>
+        </div>
+        <div id="tab-outbound-transform" class="tab-panel" style="display:none;">
+           <p><b>Outbound Transformations</b></p>
+           <label style="display:flex;gap:8px;align-items:center;margin:8px 0 12px;">
+             <input id="transform-global-enabled-outbound" type="checkbox" />
+             <span>Enable transform rules globally</span>
+           </label>
+           <label for="outbound-custom-js" style="display:block;margin:8px 0 4px;">Custom JS Preprocessor</label>
+           <input id="outbound-custom-js" type="text" placeholder="hook name"
+             style="width:100%;max-width:420px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;" />
+           <label for="outbound-default-expr" style="display:block;margin:8px 0 4px;">Default JSONata Expression</label>
+           <textarea id="outbound-default-expr" rows="4"
+             style="width:100%;max-width:740px;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;"></textarea>
+           <label for="outbound-fallback" style="display:block;margin:8px 0 4px;">Fallback</label>
+           <select id="outbound-fallback" style="width:100%;max-width:280px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;">
+             <option value="passthrough">passthrough</option>
+             <option value="transform_default">transform_default</option>
+             <option value="error">error</option>
+           </select>
+           <p style="margin:10px 0 6px;"><b>Rules</b></p>
+           <div id="outbound-rules-list" style="display:flex;flex-direction:column;gap:10px;"></div>
+           <div style="margin-top:8px;">
+             <button type="button" id="outbound-add-rule-btn">Add rule</button>
+           </div>
+           <hr style="margin:16px 0;border:none;border-top:1px solid #e2e8f0;" />
+           <p><b>Enrichments</b></p>
+           <div id="headers-input-wrap" style="margin-top:8px;"></div>
+           <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
+             <button type="button" id="headers-save-btn">Save headers</button>
+           </div>
+           <div id="headers-list" style="margin-top:10px;padding:12px;border:1px solid #ddd;border-radius:8px;"></div>
+          <div style="margin-top:14px;border-top:1px solid #e2e8f0;padding-top:10px;display:flex;justify-content:flex-end;">
+            <button type="button" id="footer-save-outbound-transform" style="background:#0f172a;color:#fff;border:1px solid #0f172a;padding:8px 14px;border-radius:8px;">Save</button>
+          </div>
+        </div>
+        <div id="tab-inbound-auth" class="tab-panel" style="display:none;">
+           <p><b>Inbound Auth</b></p>
+           <label for="kr-proxy-expiry" style="display:block;margin:10px 0 4px;">Proxy Key Expiry Seconds</label>
+           <input id="kr-proxy-expiry" type="text" placeholder="n/a"
+             style="width:100%;max-width:220px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;" />
+           <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;"></div>
+           <div style="display:flex;align-items:center;gap:8px;margin:10px 0 6px;">
+             <b>Proxy Key Status</b>
+             <a href="#" id="keys-refresh-link-inbound">refresh</a>
+           </div>
+           <div id="keys-status-inbound" style="padding:12px;border:1px solid #ddd;border-radius:8px;line-height:1.6;margin-bottom:10px;">Key status will appear here.</div>
+           <div style="display:flex;gap:8px;flex-wrap:wrap;">
+             <button type="button" id="rotate-proxy-btn">Rotate proxy key</button>
+           </div>
+           <hr style="margin:16px 0;border:none;border-top:1px solid #e2e8f0;" />
+           <p><b>JSON Web Token (JWT)</b></p>
+           <label style="display:flex;gap:8px;align-items:center;margin:8px 0 10px;">
+             <input id="jwt-enabled" type="checkbox" />
+             <span>Enable JWT Authentication</span>
+           </label>
+           <label for="jwt-endpoint-url" style="display:block;margin:8px 0 4px;">JWT Endpoint URL</label>
+           <input id="jwt-endpoint-url" type="text" readonly
+             style="width:100%;max-width:620px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;background:#f8fafc;" />
+           <div id="jwt-fields" style="display:none;">
+             <p style="margin:10px 0 6px;"><b>Validate 3rd-Party JWTs from this proxy</b></p>
+             <label style="display:flex;gap:8px;align-items:center;margin:8px 0 6px;">
+               <input id="jwt-inbound-enabled" type="checkbox" />
+               <span>Enable</span>
+             </label>
+             <div id="jwt-inbound-fields" style="display:none;">
+               <label for="jwt-inbound-mode" style="display:block;margin:8px 0 4px;">Verification mode</label>
+               <select id="jwt-inbound-mode" style="width:100%;max-width:220px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;">
+                 <option value="shared_secret">shared_secret</option>
+                 <option value="jwks">jwks</option>
+               </select>
+               <div id="jwt-inbound-shared-note" style="font-size:12px;color:#64748b;margin-top:4px;">Shared secret uses the issuer key (HS256).</div>
+               <label for="jwt-inbound-header" style="display:block;margin:8px 0 4px;">JWT header name</label>
+               <input id="jwt-inbound-header" type="text" placeholder="Authorization"
+                 style="width:100%;max-width:420px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;" />
+               <label for="jwt-inbound-scheme" style="display:block;margin:8px 0 4px;">JWT scheme (optional)</label>
+               <input id="jwt-inbound-scheme" type="text" placeholder="Bearer"
+                 style="width:100%;max-width:220px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;" />
+               <label for="jwt-inbound-issuer" style="display:block;margin:8px 0 4px;">Issuer (optional)</label>
+               <input id="jwt-inbound-issuer" type="text" placeholder="iss"
+                 style="width:100%;max-width:520px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;" />
+               <label for="jwt-inbound-audience" style="display:block;margin:8px 0 4px;">Audience (optional)</label>
+               <input id="jwt-inbound-audience" type="text" placeholder="aud"
+                 style="width:100%;max-width:520px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;" />
+              <div id="jwt-inbound-jwks-fields" style="display:none;">
+                <p style="margin:8px 0 6px;"><b>JWKS Request</b></p>
+                <div id="jwt-jwks-request-form"></div>
+              </div>
+              <div id="jwt-inbound-secret-template" style="margin-top:12px;"></div>
+               <label for="jwt-inbound-skew" style="display:block;margin:8px 0 4px;">Clock skew seconds</label>
+               <input id="jwt-inbound-skew" type="text" placeholder="0"
+                 style="width:100%;max-width:160px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;" />
+             </div>
+             <hr style="margin:16px 0;border:none;border-top:1px solid #e2e8f0;" />
+             <p style="margin:10px 0 6px;"><b>Issue JWTs from this proxy</b></p>
+             <label style="display:flex;gap:8px;align-items:center;margin:8px 0 6px;">
+               <input id="jwt-outbound-enabled" type="checkbox" />
+               <span>Enable</span>
+             </label>
+             <div id="jwt-outbound-fields" style="display:none;">
+               <div style="font-size:12px;color:#64748b;margin-top:4px;">Outbound signing uses the issuer key (HS256).</div>
+               <label for="jwt-outbound-header" style="display:block;margin:8px 0 4px;">JWT header name</label>
+               <input id="jwt-outbound-header" type="text" placeholder="Authorization"
+                 style="width:100%;max-width:420px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;" />
+               <label for="jwt-outbound-scheme" style="display:block;margin:8px 0 4px;">JWT scheme (optional)</label>
+               <input id="jwt-outbound-scheme" type="text" placeholder="Bearer"
+                 style="width:100%;max-width:220px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;" />
+               <label for="jwt-outbound-issuer" style="display:block;margin:8px 0 4px;">Issuer (optional)</label>
+               <input id="jwt-outbound-issuer" type="text" placeholder="iss"
+                 style="width:100%;max-width:520px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;" />
+               <label for="jwt-outbound-audience" style="display:block;margin:8px 0 4px;">Audience (optional)</label>
+               <input id="jwt-outbound-audience" type="text" placeholder="aud"
+                 style="width:100%;max-width:520px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;" />
+               <label for="jwt-outbound-subject" style="display:block;margin:8px 0 4px;">Subject (optional)</label>
+               <input id="jwt-outbound-subject" type="text" placeholder="sub"
+                 style="width:100%;max-width:520px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;" />
+               <label for="jwt-outbound-ttl" style="display:block;margin:8px 0 4px;">Token TTL seconds</label>
+               <input id="jwt-outbound-ttl" type="text" placeholder="3600"
+                 style="width:100%;max-width:160px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;" />
+             </div>
+             <hr style="margin:16px 0;border:none;border-top:1px solid #e2e8f0;" />
+             <label for="kr-issuer-expiry" style="display:block;margin:10px 0 4px;">Issuer Auth Token Expiry Seconds</label>
+             <input id="kr-issuer-expiry" type="text" placeholder="n/a"
+               style="width:100%;max-width:220px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;" />
+             <div style="display:flex;align-items:center;gap:8px;margin:10px 0 6px;">
+               <b>Issuer Key Status</b>
+               <a href="#" id="keys-refresh-link-issuer">refresh</a>
+             </div>
+             <div id="keys-status-issuer" style="padding:12px;border:1px solid #ddd;border-radius:8px;line-height:1.6;margin-bottom:10px;">Issuer key status will appear here.</div>
+             <div style="display:flex;gap:8px;flex-wrap:wrap;">
+               <button type="button" id="rotate-issuer-btn">Rotate issuer key</button>
+             </div>
+           </div>
+          <div style="margin-top:14px;border-top:1px solid #e2e8f0;padding-top:10px;display:flex;justify-content:flex-end;">
+            <button type="button" id="footer-save-inbound-auth" style="background:#0f172a;color:#fff;border:1px solid #0f172a;padding:8px 14px;border-radius:8px;">Save</button>
+          </div>
+        </div>
+        <div id="tab-admin-auth" class="tab-panel" style="display:none;">
+           <p><b>Admin Auth</b></p>
+           <label for="kr-admin-expiry" style="display:block;margin:10px 0 4px;">Admin Key Expiry Seconds</label>
+           <input id="kr-admin-expiry" type="text" placeholder="n/a"
+             style="width:100%;max-width:220px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;" />
+           <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;"></div>
+           <div style="display:flex;align-items:center;gap:8px;margin:10px 0 6px;">
+             <b>Admin Key Status</b>
+             <a href="#" id="keys-refresh-link-admin">refresh</a>
+           </div>
+           <div id="keys-status-admin" style="padding:12px;border:1px solid #ddd;border-radius:8px;line-height:1.6;margin-bottom:10px;">Admin key status will appear here.</div>
+           <div style="display:flex;gap:8px;flex-wrap:wrap;">
+             <button type="button" id="rotate-admin-btn">Rotate admin key</button>
+           </div>
+          <div style="margin-top:14px;border-top:1px solid #e2e8f0;padding-top:10px;display:flex;justify-content:flex-end;">
+            <button type="button" id="footer-save-admin-auth" style="background:#0f172a;color:#fff;border:1px solid #0f172a;padding:8px 14px;border-radius:8px;">Save</button>
+          </div>
+        </div>
+        <div id="tab-inbound-transform" class="tab-panel" style="display:none;">
+           <p><b>Header Filtering</b></p>
+           <label style="display:flex;gap:8px;align-items:center;margin:8px 0 12px;">
+             <input id="transform-global-enabled-inbound" type="checkbox" />
+             <span>Enable transform rules globally</span>
+           </label>
+           <label for="inbound-default-expr" style="display:block;margin:8px 0 4px;">Global JSONata Expression</label>
+           <textarea id="inbound-default-expr" rows="4"
+             style="width:100%;max-width:740px;padding:10px;border:1px solid #cbd5e1;border-radius:8px;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;"></textarea>
+           <label for="inbound-fallback" style="display:block;margin:8px 0 4px;">Fallback</label>
+           <select id="inbound-fallback" style="width:100%;max-width:280px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;">
+             <option value="passthrough">passthrough</option>
+             <option value="transform_default">transform_default</option>
+             <option value="error">error</option>
+           </select>
+           <p style="margin:10px 0 6px;"><b>Rules</b></p>
+           <div id="inbound-rules-list" style="display:flex;flex-direction:column;gap:10px;"></div>
+           <div style="margin-top:8px;">
+             <button type="button" id="inbound-add-rule-btn">Add rule</button>
+           </div>
+           <label for="inbound-header-filtering-mode" style="display:block;margin:12px 0 4px;">Filter method</label>
+           <select id="inbound-header-filtering-mode" style="width:100%;max-width:220px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;">
+             <option value="blacklist">blacklist</option>
+             <option value="whitelist">whitelist</option>
+           </select>
+           <label for="inbound-header-filtering-names" style="display:block;margin:8px 0 4px;">Header list (comma-separated)</label>
+           <input id="inbound-header-filtering-names" type="text" placeholder="authorization, cookie"
+             style="width:100%;max-width:620px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;" />
+           <div id="inbound-header-filtering-help" style="font-size:12px;color:#64748b;margin-top:4px;"></div>
+           <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;"></div>
+          <div style="margin-top:14px;border-top:1px solid #e2e8f0;padding-top:10px;display:flex;justify-content:flex-end;">
+            <button type="button" id="footer-save-inbound-transform" style="background:#0f172a;color:#fff;border:1px solid #0f172a;padding:8px 14px;border-radius:8px;">Save</button>
+          </div>
+        </div>
+         <div id="tab-sandbox" class="tab-panel" style="display:none;">
+           <p><b>API Sandbox</b></p>
+           <div style="flex:1;min-width:340px;">
+           <label style="display:block;margin:4px 0 4px;">Built-in Auth Header</label>
+           <select id="sandbox-auth-mode" style="width:100%;max-width:420px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;">
+             <option value="admin_token">Authorization: Bearer (current admin token)</option>
+             <option value="none">none</option>
+             <option value="admin_key">X-Admin-Key</option>
+             <option value="proxy_key">X-Proxy-Key</option>
+             <option value="issuer_key">X-Issuer-Key</option>
+           </select>
+           <label for="sandbox-template" style="display:block;margin:10px 0 4px;">Template</label>
+           <select id="sandbox-template" style="width:100%;max-width:520px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;"></select>
+             <div id="sandbox-auth-value-wrap" style="display:none;">
+               <label for="sandbox-auth-value" style="display:block;margin:8px 0 4px;">Auth Header Value (when required)</label>
+               <input id="sandbox-auth-value" type="password" placeholder="header value"
+                 style="width:100%;max-width:520px;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;" />
+             </div>
+             <div id="sandbox-request-form"></div>
+             <div style="margin-top:10px;">
+               <button type="button" id="sandbox-send-btn">Make HTTP Request</button>
+             </div>
+           </div>
+           <p style="margin-top:10px;"><b>cURL</b></p>
+           <div style="font-size:12px;color:#64748b;margin-top:-4px;margin-bottom:6px;">secrets redacted</div>
+           <pre id="sandbox-request" style="margin-top:6px;padding:12px;border:1px solid #ddd;border-radius:8px;white-space:pre-wrap;word-break:break-word;">curl preview appears here.</pre>
+           <p style="margin-top:10px;"><b>Response</b></p>
+           <pre id="sandbox-response" style="margin-top:6px;padding:12px;border:1px solid #ddd;border-radius:8px;white-space:pre-wrap;word-break:break-word;">Response appears here.</pre>
+         </div>
+         </div>
+         </div>
+       </div>
+       <dialog id="delete-header-modal" style="max-width:420px;border:1px solid #e2e8f0;border-radius:10px;padding:16px;">
+         <p style="margin-top:0;"><b>Delete enrichment?</b></p>
+         <p id="delete-header-modal-text" style="margin:8px 0 12px 0;"></p>
+         <div style="display:flex;gap:8px;justify-content:flex-end;">
+           <button type="button" id="delete-header-cancel-btn">Cancel</button>
+           <button type="button" id="delete-header-confirm-btn">Delete</button>
+         </div>
+       </dialog>
+<script src="/_apiproxy/admin/assets/admin-page.js"></script>

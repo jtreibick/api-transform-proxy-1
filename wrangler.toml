@@ -1,0 +1,27 @@
+name = "api-transform-proxy-1"
+main = "src/control_entry.js"
+compatibility_date = "2026-03-01"
+workers_dev = true
+
+[[rules]]
+type = "Text"
+globs = ["**/ui/templates/*.js"]
+fallthrough = true
+
+[env.runtime]
+main = "src/runtime_entry.js"
+
+[[env.runtime.kv_namespaces]]
+binding = "CONFIG"
+
+[env.runtime.vars]
+BUILD_TIMESTAMP = "dev"
+
+[env.control]
+main = "src/control_entry.js"
+
+[[env.control.kv_namespaces]]
+binding = "CONFIG"
+
+[env.control.vars]
+BUILD_TIMESTAMP = "dev"
